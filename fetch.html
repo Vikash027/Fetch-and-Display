@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fetching and Displaying Users</title>
+    <style>
+        #userContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.userCard {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px;
+    width: 200px;
+    text-align: center;
+}
+
+.userAvatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+.userName {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.userEmail {
+    color: #666;
+}
+
+    </style>
+</head>
+<body>
+    <button id="fetchButton">Fetch Users</button>
+    <div id="userContainer"></div>
+    <script>
+        document.getElementById("fetchButton").addEventListener("click", fetchUsers);
+
+function fetchUsers() {
+    fetch("https://reqres.in/api/users")
+        .then(response => response.json())
+        .then(data => {
+            displayUsers(data.data);
+        })
+        .catch(error => {
+            console.error("Error fetching users:", error);
+        });
+}
+
+function displayUsers(users) {
+    const userContainer = document.getElementById("userContainer");
+    userContainer.innerHTML = "";
+
+    users.forEach(user => {
+        const userCard = document.createElement("div");
+        userCard.classList.add("userCard");
+
+        const userAvatar = document.createElement("img");
+        userAvatar.classList.add("userAvatar");
+        userAvatar.src = user.avatar;
+        userAvatar.alt = "User Avatar";
+
+        const userName = document.createElement("div");
+        userName.classList.add("userName");
+        userName.textContent = `${user.first_name} ${user.last_name}`;
+
+        const userEmail = document.createElement("div");
+        userEmail.classList.add("userEmail");
+        userEmail.textContent = user.email;
+
+        userCard.appendChild(userAvatar);
+        userCard.appendChild(userName);
+        userCard.appendChild(userEmail);
+
+        userContainer.appendChild(userCard);
+    });
+}
+
+    </script>
+</body>
+</html>
